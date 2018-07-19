@@ -1,8 +1,13 @@
 import _ from 'ramda';
 
 import { Maybe, Identity, IO, Either } from 'ramda-fantasy';
-import { inspectIt, assertEqual, assertDeepEqual } from './helper';
-import fs from 'fs';
+import {
+  inspectIt,
+  assertEqual,
+  assertDeepEqual,
+  log,
+  safeReadFileSync
+} from './helper';
 
 const Left = Either.Left;
 const Right = Either.Right;
@@ -11,26 +16,21 @@ const runIO = IO.runIO;
 console.log('-----------------------------------------------------------');
 console.log('IO');
 
-var log = function(x) {
-  console.log(x);
-  return x;
-};
-
 // Exercise 1
 // ==========
 // Write a function that uses checkActive() and showWelcome() to grant access or return the error
 console.log('--------Start exercise 1--------');
 
-var showWelcome = _.compose(
+const showWelcome = _.compose(
   _.add('Welcome '),
   _.prop('name')
 );
 
-var checkActive = function(user) {
+const checkActive = function(user) {
   return user.active ? Right(user) : Left('Your account is not active');
 };
 
-var ex1 = _.compose(
+const ex1 = _.compose(
   _.map(showWelcome),
   checkActive
 );
@@ -50,7 +50,7 @@ console.log('exercise 1...ok!');
 // Write a validation function that checks for a length > 3. It should return Right(x) if it is greater than 3 and Left("You need > 3") otherwise
 console.log('--------Start exercise 2--------');
 
-var ex2 = function(x) {
+const ex2 = function(x) {
   //   return "TODO: write me";
   return _.length(x) > 3 ? Right(x) : Left('You need > 3');
 };
@@ -63,12 +63,12 @@ console.log('exercise 2...ok!');
 // ==========
 // Use ex2 above and Either as a functor to save the user if they are valid
 
-var save = function(x) {
+const save = function(x) {
   console.log('SAVED USER!');
   return x;
 };
 
-var ex3 = _.compose(
+const ex3 = _.compose(
   _.map(save),
   ex2
 );
@@ -83,13 +83,11 @@ console.log('exercise 3...ok!');
 // Get the text from the input and strip the spaces
 console.log('--------Start exercise 4--------');
 
-const safeReadFileSync = file => IO(() => fs.readFileSync(file, 'utf-8'));
-
-var stripSpaces = function(s) {
+const stripSpaces = function(s) {
   return s.replace(/\s+/g, '');
 };
 
-var ex4 = _.compose(
+const ex4 = _.compose(
   _.map(stripSpaces),
   safeReadFileSync
 );
@@ -101,11 +99,11 @@ console.log('exercise 4...ok!');
 // ==========
 // Use getHref() / getProtocal() and runIO() to get the protocal of the page.
 
-var getProtocal = _.compose(
+const getProtocal = _.compose(
   _.head,
   _.split('/')
 );
-var ex5 = _.compose(
+const ex5 = _.compose(
   _.map(getProtocal),
   safeReadFileSync
 );
@@ -129,7 +127,7 @@ const getStringEmail = _.compose(
   _.prop('email'),
   JSON.parse
 );
-var ex6 = _.compose(
+const ex6 = _.compose(
   _.map(_.map(getStringEmail)),
   getCache
 );

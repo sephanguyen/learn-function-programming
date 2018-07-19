@@ -1,1 +1,1 @@
-http://jsbin.com/abc
+http://run.jsbin.io/runner

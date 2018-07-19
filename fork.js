@@ -1,7 +1,14 @@
 import _ from 'ramda';
 
 import { Maybe, Identity, IO, Either, Future } from 'ramda-fantasy';
-import { inspectIt, assertEqual, assertDeepEqual } from './helper';
+import {
+  inspectIt,
+  assertEqual,
+  assertDeepEqual,
+  log,
+  getPost,
+  safeGet
+} from './helper';
 import fs from 'fs';
 
 const Left = Either.Left;
@@ -11,17 +18,12 @@ const runIO = IO.runIO;
 console.log('-----------------------------------------------------------');
 console.log('EXERCISE');
 
-var log = function(x) {
-  console.log(x);
-  return x;
-};
-
 // Exercise 1
 // ==========
 // Use getPost(id) to return a Future of the title of the post ({id: i, title: 'Love them futures'})
 console.log('--------Start exercise 1--------');
 
-var ex1 = _.compose(
+const ex1 = _.compose(
   _.map(_.prop('title')),
   getPost
 );
@@ -31,23 +33,15 @@ ex1(3).fork(log, function(title) {
   console.log('exercise 1..ok!');
 });
 
-function getPost(i) {
-  return new Future(function(rej, res) {
-    setTimeout(function() {
-      res({ id: i, title: 'Love them futures' });
-    }, 300);
-  });
-}
-
 // Exercise 2
 // ==========
 // Use ex1 to extend the computation and render the title in a div
 console.log('--------Start exercise 2--------');
 
-var render = function(x) {
+const render = function(x) {
   return '<div>' + x + '</div>';
 };
-var ex2 = _.compose(
+const ex2 = _.compose(
   _.map(render),
   ex1
 );
@@ -63,16 +57,13 @@ ex2(3).fork(log, function(html) {
 
 console.log('--------Start exercise 5--------');
 
-var safeGet = _.curry(function(x, o) {
-  return Maybe(o[x]);
-});
-var user = {
+const user = {
   id: 2,
   name: 'Albert',
   address: { street: { number: 22, name: 'Walnut St' } }
 };
-var ex5 = _.compose(
-  _.map(_.map(safeGet('name'))),
+const ex5 = _.compose(
+  _.map(safeGet('name')),
   _.map(safeGet('street')),
   safeGet('address')
 );

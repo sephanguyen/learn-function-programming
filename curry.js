@@ -27,11 +27,11 @@ assertEqualArrays([3, 6, 9], tripleList([1, 2, 3]));
 // this with currying and one of the list
 // functions _.map, _.filter, or _.reduce.
 
-var greater = function(a, b) {
+const greater = function(a, b) {
   return a > b ? a : b;
 };
 
-var max = _.reduce(greater, -Infinity);
+const max = _.reduce(greater, -Infinity);
 assertEqual(9, max([1, -3483, 9, 7, 2]));
 assertEqual(-1, max([-21, -3483, -2, -1]));
 

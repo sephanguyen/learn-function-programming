@@ -41,7 +41,7 @@ assertEqualArrays(['Debbie Downer', 'Caspar Milquetoast'], names(articles));
 // Use the names function you wrote above
 // with _.compose and _.contains.
 
-var isAuthor = function(name, articles) {
+const isAuthor = function(name, articles) {
   return _.compose(
     _.contains(name),
     names
@@ -57,7 +57,7 @@ assertEqual(true, isAuthor('Debbie Downer', articles));
 // another function that combines functions
 // to let us write code without glue variables.
 
-var fork = _.curry(function(lastly, f, g, x) {
+const fork = _.curry(function(lastly, f, g, x) {
   return lastly(f(x), g(x));
 });
 
@@ -70,7 +70,7 @@ var fork = _.curry(function(lastly, f, g, x) {
 // compute the average values in a list using
 // only fork, _.divide, _.sum, and _.size.
 
-var avg = fork(_.divide, _.sum, _.length); // change this
+const avg = fork(_.divide, _.sum, _.length); // change this
 assertEqual(3, avg([1, 2, 3, 4, 5]));
 
 console.log('All tests pass.');
